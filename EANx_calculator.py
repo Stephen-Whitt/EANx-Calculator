@@ -2,11 +2,13 @@
 # 1 ATA == 14.7 PSI (i.e, ambient pressure at sea level)
 # Every additional 33' adds 1 ATA to the ambient ATA at the surface
 
+import os
 PO2 = 1.4 # Constant to ensure calculations are based on the recommended maximum PO2 (partial pressure of O2) [excluding 02_Dose calculations]
 
 # Calculate and print the Maximum Operating Depth for a given EANx blend (decimal PO2)
 def MOD():
-    print("\n")
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print("Maximum Operating Depth (MOD)\n")
     try:
         eanx_Blend = float(input("Which EANx FO\u2082 would you like to use? (e.g., 0.32): "))
         ATA = (PO2 / eanx_Blend) # Calculate ATA for the given EANx blend
@@ -18,7 +20,8 @@ def MOD():
     
 # Calculate and print the optimal gas mixture (decimal PO2) for a given maximum depth
 def Best_Mix():
-    print("\n")
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print("Optimal Mixture:\n")
     try:
         max_Depth = float(input("What is the maximum depth, in feet, for this planned dive? (e.g., 60): "))
         ATA = ((max_Depth / 33) + 1) # Convert max depth to ATA
@@ -38,13 +41,17 @@ def Best_Mix():
     
 # Calculate and print the O2 dose for a given maximum depth
 def O2_Dose():
-    print("\n")
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print("O\u2082 Dose:\n")
     try:
         max_Depth = float(input("What is the maximum depth, in feet, for this planned dive? (e.g., 60): "))
         ATA = ((max_Depth / 33) + 1) # Convert max depth to ATA
         FO2 = float(input("Which EANx mixture would you like to use? (e.g., 0.32): "))
-        PO2 = round((FO2 * ATA), 2) # Calculate the PO2 for the given EANx blend & maximum depth
-        print(f"The PO\u2082 (Partial pressure of O\u2082) at the maximum depth of {max_Depth} feet is {PO2}")
+        usr_PO2 = round((FO2 * ATA), 2) # Calculate the PO2 for the given EANx blend & maximum depth
+        if (usr_PO2 <= PO2):
+            print(f"The PO\u2082 (Partial pressure of O\u2082) at the maximum depth of {max_Depth} feet is {usr_PO2}")
+        else:
+            print(f"The planned dive with EANx mixture {FO2} at max depth {max_Depth} has a PO\u2082 of {usr_PO2} which is outside the safe limit of 1.4 ... please reference the Optimal Mixture calculation.")
     except ValueError:
         print("\nPlease correct input formatting such that '60' corresponds to a planned 60 ft. maximum depth and '0.32' corresponds to 32% EANx ...\n")
         O2_Dose()
@@ -54,6 +61,7 @@ def another():
     if (another_choice.lower() == "y"):
         choose()
     else:
+        os.system('cls' if os.name == 'nt' else 'clear')
         print(
             """
         ____             _                
@@ -82,6 +90,7 @@ def another():
 
 def choose():
     try:
+        print("\n")
         usr_choice = input(
             "1). Maximum Operating Depth (MOD) \n"
             "2). Optimal Mixture \n"
@@ -99,6 +108,7 @@ def choose():
             O2_Dose()
             another()
         elif (usr_choice == "4"):
+            os.system('cls' if os.name == 'nt' else 'clear')
             print(
             """
         ____             _                
@@ -128,6 +138,7 @@ def choose():
             print("\nInvalid option ... try again\n")
             choose()
     except KeyboardInterrupt:
+        os.system('cls' if os.name == 'nt' else 'clear')
         print(
             """
         ____             _                
@@ -156,10 +167,8 @@ def choose():
 
 print(
         """
-                        .   o
                        o   .
                       .   o
-                        o
                        o
                     .   o
                     =-:         
